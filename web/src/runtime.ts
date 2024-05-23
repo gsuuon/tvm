@@ -519,11 +519,18 @@ export class NDArray implements Disposable {
   /**
    * Create a view of the array.
    * @param shape The shape of the view.
+   * @param dtype? Data type of the view.
+   * @param byteOffset? Byte offset of the view.
    * @returns The new sliced ndarray.
    */
-  view(shape: Array<number>): NDArray {
+  view(shape: Array<number>, dtype = this.dtype, byteOffset = 0): NDArray {
     const shapeArray = shape.map((value) => new Scalar(value, "int"));
-    return this.ctx.ndarrayCreateView(this, this.ctx.makeShapeTuple(...shapeArray));
+    return this.ctx.ndarrayCreateView(
+      this,
+      this.ctx.makeShapeTuple(...shapeArray),
+      dtype,
+      new Scalar(byteOffset, "int32")
+    );
   }
 
   /**
